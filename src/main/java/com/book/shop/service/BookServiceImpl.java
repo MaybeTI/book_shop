@@ -6,6 +6,7 @@ import com.book.shop.mapper.BookMapper;
 import com.book.shop.repository.BookRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
