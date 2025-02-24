@@ -1,30 +1,27 @@
 package com.book.shop.shop.repository;
 
+import com.book.shop.shop.exceptions.EntityNotFoundException;
 import com.book.shop.shop.models.Book;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import java.util.List;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+@RequiredArgsConstructor
 @Repository
 public class BookRepositoryImpl implements BookRepository {
-    private final SessionFactory sessionFactory;
-
-    @Autowired
-    BookRepositoryImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    private final EntityManagerFactory entityManagerFactory;
 
     @Override
     public Book save(Book book) {
-        Session session = null;
-        Transaction transaction = null;
+        EntityManager entityManager = null;
+        EntityTransaction transaction = null;
         try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            session.save(book);
+            entityManager = entityManagerFactory.createEntityManager();
+            transaction = entityManager.getTransaction();
+            entityManager.persist(book);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -32,8 +29,8 @@ public class BookRepositoryImpl implements BookRepository {
             }
             throw new RuntimeException(e);
         } finally {
-            if (session != null) {
-                session.close();
+            if (entityManager != null) {
+                entityManager.close();
             }
         }
         return book;
@@ -41,8 +38,17 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public List<Book> findAll() {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Book", Book.class).list();
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            return entityManager.createQuery("from Book", Book.class).getResultList();
+        }
+    }
+
+    @Override
+    public Book findById(Long id) {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            return entityManager.find(Book.class, id);
+        } catch (Exception e) {
+            throw new EntityNotFoundException("Cant find book with id: " + id, e);
         }
     }
 }
