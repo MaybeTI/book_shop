@@ -1,13 +1,15 @@
 package com.book.shop.controller;
 
 import com.book.shop.dto.BookDto;
-import com.book.shop.dto.CreateBookRequestDto;
+import com.book.shop.dto.CreateOrUpdadeBookRequestDto;
 import com.book.shop.service.BookService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +31,18 @@ public class BookController {
     }
 
     @PostMapping
-    public BookDto createBook(@RequestBody CreateBookRequestDto bookRequestDto) {
+    public BookDto createBook(@RequestBody CreateOrUpdadeBookRequestDto bookRequestDto) {
         return bookService.save(bookRequestDto);
+    }
+
+    @PutMapping("{id}")
+    public void updateBook(@PathVariable Long id,
+                           @RequestBody CreateOrUpdadeBookRequestDto bookRequestDto) {
+        bookService.updateById(id, bookRequestDto);
+    }
+
+    @DeleteMapping("{id}")
+    public void deleteBook(@PathVariable Long id) {
+        bookService.deleteById(id);
     }
 }
