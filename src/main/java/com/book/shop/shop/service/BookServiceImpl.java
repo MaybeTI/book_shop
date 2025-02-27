@@ -1,10 +1,10 @@
 package com.book.shop.shop.service;
 
 import com.book.shop.shop.dto.BookDto;
-import com.book.shop.shop.dto.CreateBookRequestDto;
+import com.book.shop.shop.dto.CreateOrUpdadeBookRequestDto;
 import com.book.shop.shop.mapper.BookMapper;
-import com.book.shop.shop.models.Book;
 import com.book.shop.shop.repository.BookRepository;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +17,8 @@ public class BookServiceImpl implements BookService {
     private final BookMapper bookMapper;
 
     @Override
-    public BookDto save(CreateBookRequestDto bookRequestDto) {
-        Book book = bookMapper.toModel(bookRequestDto);
-        return bookMapper.toDto(bookRepository.save(book));
+    public BookDto save(CreateOrUpdadeBookRequestDto bookRequestDto) {
+        return bookMapper.toDto(bookRepository.save(bookMapper.toModel(bookRequestDto)));
     }
 
     @Override
@@ -31,6 +30,17 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto findById(Long id) {
-        return bookMapper.toDto(bookRepository.findById(id));
+        return bookMapper.toDto(bookRepository.findById(id).get());
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        bookRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void updateById(Long id, CreateOrUpdadeBookRequestDto bookRequestDto) {
+        bookRepository.updateById(id, bookMapper.toModel(bookRequestDto));
     }
 }
