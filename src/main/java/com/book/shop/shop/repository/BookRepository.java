@@ -2,11 +2,12 @@ package com.book.shop.shop.repository;
 
 import com.book.shop.shop.models.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface BookRepository extends JpaRepository<Book, Long> {
+public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
     @Query("UPDATE Book b set b.title = :#{#book.title},"
             + "b.author = :#{#book.author},"
             + "b.isbn = :#{#book.isbn},"
