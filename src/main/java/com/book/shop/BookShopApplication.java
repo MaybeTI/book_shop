@@ -1,4 +1,4 @@
-package com.book.shop.book_shop;
+package com.book.shop;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,5 +9,4 @@ public class BookShopApplication {
     public static void main(String[] args) {
         SpringApplication.run(BookShopApplication.class, args);
     }
-
 }
