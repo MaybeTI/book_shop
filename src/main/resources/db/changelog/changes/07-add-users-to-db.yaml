@@ -1,0 +1,104 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-users-to-db
+      author: admin
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "user1@example.com"
+              - column:
+                  name: password
+                  value: "$2a$10$g2coYAEsPguOSmA9S6OVtuM/VbmZq2ckKSMkxI2DCvXB6DBs.mXvO"
+              - column:
+                  name: first_name
+                  value: "John"
+              - column:
+                  name: last_name
+                  value: "Doe"
+              - column:
+                  name: shipping_address
+                  value: "123 Main St, City, Country"
+              - column:
+                  name: is_deleted
+                  valueNumeric: 0
+
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "user2@example.com"
+              - column:
+                  name: password
+                  value: "$2a$10$g2coYAEsPguOSmA9S6OVtuM/VbmZq2ckKSMkxI2DCvXB6DBs.mXvO"
+              - column:
+                  name: first_name
+                  value: "Jane"
+              - column:
+                  name: last_name
+                  value: "Doe"
+              - column:
+                  name: shipping_address
+                  value: "456 Main St, City, Country"
+              - column:
+                  name: is_deleted
+                  valueNumeric: 0
+
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "admin@example.com"
+              - column:
+                  name: password
+                  value: "$2a$10$zfNuNgL56/8B6bVXi258tOeDriDlNBaUvzUJ3B.Gv8vzh6HEd9Tyu"
+              - column:
+                  name: first_name
+                  value: "Admin"
+              - column:
+                  name: last_name
+                  value: "User"
+              - column:
+                  name: shipping_address
+                  value: "789 Admin St, City, Country"
+              - column:
+                  name: is_deleted
+                  valueNumeric: 0
+
+  - changeSet:
+      id: add-roles-to-users
+      author: admin
+      changes:
+        - insert:
+            tableName: user_roles
+            columns:
+              - column:
+                  name: user_id
+                  value: "1"
+              - column:
+                  name: role_id
+                  value: "2"
+
+        - insert:
+            tableName: user_roles
+            columns:
+              - column:
+                  name: user_id
+                  value: "2"
+              - column:
+                  name: role_id
+                  value: "2"
+
+        - insert:
+            tableName: user_roles
+            columns:
+              - column:
+                  name: user_id
+                  value: "3"
+              - column:
+                  name: role_id
+                  value: "1"
