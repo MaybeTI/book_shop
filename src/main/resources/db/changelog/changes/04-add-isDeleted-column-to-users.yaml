@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-isDeleted-column-to-users
+      author: admin
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+      preConditions:
+        - onFail: HALT
+        - not:
+            columnExists:
+              tableName: users
+              columnName: isDeleted
+
