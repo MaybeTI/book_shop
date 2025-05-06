@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
+import java.util.List;
 import lombok.Data;
 
 @Data
@@ -36,4 +37,8 @@ public class CreateOrUpdateBookRequestDto {
     @Schema(description = "URL of the book cover image",
             example = "https://example.com/pragmatic.jpg")
     private String coverImage;
+
+    @Schema(description = "List of category IDs associated with the book",
+            example = "[1, 2, 3]")
+    private List<Long> categoryIds;
 }

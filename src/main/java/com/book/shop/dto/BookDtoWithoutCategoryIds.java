@@ -2,13 +2,11 @@ package com.book.shop.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
-import java.util.List;
 import lombok.Data;
 
 @Data
 @Schema(description = "DTO representing a book")
-public class BookDto {
-
+public class BookDtoWithoutCategoryIds {
     @Schema(description = "Unique identifier of the book", example = "1")
     private Long id;
 
@@ -30,8 +28,4 @@ public class BookDto {
 
     @Schema(description = "URL of the book cover image", example = "https://example.com/cover.jpg")
     private String coverImage;
-
-    @Schema(description = "Set of categories associated with the book",
-            example = "[\"Fiction\", \"Science\", \"Biography\"]")
-    private List<Long> categoryIds;
 }
