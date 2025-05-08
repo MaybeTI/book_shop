@@ -15,21 +15,24 @@
     <description>book_shop</description>
     <url/>
     <licenses>
-        <license/>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
     </licenses>
     <developers>
-        <developer/>
+        <developer>
+            <name>Author Name</name>
+        </developer>
     </developers>
     <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
+        <url>https://github.com/your/repo</url>
     </scm>
     <properties>
         <java.version>17</java.version>
         <maven.checkstyle.plugin.configLocation>checkstyle.xml</maven.checkstyle.plugin.configLocation>
         <jjwt.version>0.11.5</jjwt.version>
+        <liquibase.version>4.26.0</liquibase.version>
     </properties>
     <dependencies>
         <dependency>
