@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Book Shop", description = "Operations related to book management")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/books")
+@RequestMapping("/api/books")
 public class BookController {
     private static final String SEARCH_PATH = "/search";
     private static final String ID_PATH = "/{id}";

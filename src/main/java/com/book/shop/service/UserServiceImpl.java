@@ -3,8 +3,10 @@ package com.book.shop.service;
 import com.book.shop.dto.UserRegistrationRequestDto;
 import com.book.shop.dto.UserResponseDto;
 import com.book.shop.exceptions.RegistrationException;
+import com.book.shop.mapper.ShoppingCartMapper;
 import com.book.shop.mapper.UserMapper;
 import com.book.shop.models.RoleName;
+import com.book.shop.models.ShoppingCart;
 import com.book.shop.models.User;
 import com.book.shop.repository.UserRepository;
 import java.util.Set;
@@ -19,6 +21,8 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
+    private final ShoppingCartService shoppingCartService;
+    private final ShoppingCartMapper shoppingCartMapper;
 
     @Override
     public UserResponseDto createUser(UserRegistrationRequestDto requestDto) {
@@ -28,6 +32,13 @@ public class UserServiceImpl implements UserService {
         User userModel = userMapper.toModel(requestDto);
         userModel.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         userModel.setRoles(Set.of(roleService.findRole(RoleName.USER)));
-        return userMapper.toDto(userRepository.save(userModel));
+        User savedUser = userRepository.save(userModel);
+
+        ShoppingCart cart = new ShoppingCart();
+        cart.setUser(savedUser);
+        cart.setCartItems(Set.of());
+        shoppingCartService.save(shoppingCartMapper.toDto(cart));
+
+        return userMapper.toDto(savedUser);
     }
 }
