@@ -21,21 +21,25 @@ public class BookServiceImpl implements BookService {
     private final BookSpecificationBuilder bookSpecificationBuilder;
 
     @Override
+    @Transactional
     public BookDto save(CreateOrUpdateBookRequestDto bookRequestDto) {
         return bookMapper.toDto(bookRepository.save(bookMapper.toModel(bookRequestDto)));
     }
 
     @Override
+    @Transactional 
     public List<BookDto> findAll(Pageable pageable) {
         return bookMapper.toDtoList(bookRepository.findAll(pageable).getContent());
     }
 
     @Override
+    @Transactional 
     public BookDto findById(Long id) {
         return bookMapper.toDto(bookRepository.findById(id).get());
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         bookRepository.deleteById(id);
     }
@@ -47,12 +51,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional 
     public List<BookDto> search(BookSearchParametersDto searchParameters, Pageable pageable) {
         return bookMapper.toDtoList(bookRepository
                 .findAll(bookSpecificationBuilder.build(searchParameters), pageable).getContent());
     }
 
     @Override
+    @Transactional 
     public List<BookDtoWithoutCategoryIds> findAllByCategoryId(Long categoryId) {
         return bookRepository.findAllByCategoryId(categoryId).stream()
                 .map(bookMapper::toDtoWithoutCategories)
