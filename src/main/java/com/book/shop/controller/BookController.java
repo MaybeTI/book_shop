@@ -4,9 +4,15 @@ import com.book.shop.dto.BookDto;
 import com.book.shop.dto.BookSearchParametersDto;
 import com.book.shop.dto.CreateOrUpdateBookRequestDto;
 import com.book.shop.service.BookService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,41 +24,79 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Book Shop", description = "Operations related to book management")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/books")
+@RequestMapping("/books")
 public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    public List<BookDto> getAll() {
-        return bookService.findAll();
+    @Operation(summary = "Get all books", description = "Retrieve a paginated list of all books.")
+    @ApiResponse(responseCode = "200", description = "List of books successfully retrieved.")
+    public List<BookDto> getAll(Pageable pageable) {
+        return bookService.findAll(pageable);
     }
 
     @GetMapping("/{id}")
-    public BookDto getBookById(@PathVariable Long id) {
+    @Operation(summary = "Get book by ID", description = "Retrieve book details by its unique ID.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Book found successfully."),
+            @ApiResponse(responseCode = "404", description = "Book not found.")
+    })
+    public BookDto getBookById(
+            @Parameter(description = "ID of the book to retrieve", required = true)
+            @PathVariable Long id) {
         return bookService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BookDto createBook(@RequestBody @Valid CreateOrUpdateBookRequestDto bookRequestDto) {
+    @Operation(summary = "Create a new book", description = "Add a new book to the store.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Book successfully created."),
+            @ApiResponse(responseCode = "400", description = "Invalid book data provided.")
+    })
+    public BookDto createBook(
+            @RequestBody @Valid CreateOrUpdateBookRequestDto bookRequestDto) {
         return bookService.save(bookRequestDto);
     }
 
     @PutMapping("/{id}")
-    public void updateBook(@PathVariable Long id,
-                           @RequestBody CreateOrUpdateBookRequestDto bookRequestDto) {
+    @Operation(summary = "Update a book", description = "Update the details of an existing book.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Book updated successfully."),
+            @ApiResponse(responseCode = "404", description = "Book not found.")
+    })
+    public void updateBook(
+            @Parameter(description = "ID of the book to update", required = true)
+            @PathVariable Long id,
+            @RequestBody @Valid CreateOrUpdateBookRequestDto bookRequestDto) {
         bookService.updateById(id, bookRequestDto);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBook(@PathVariable Long id) {
+    @Operation(summary = "Delete a book", description = "Remove a book from the store by ID.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Book successfully deleted."),
+            @ApiResponse(responseCode = "404", description = "Book not found.")
+    })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBook(
+            @Parameter(description = "ID of the book to delete", required = true)
+            @PathVariable Long id) {
         bookService.deleteById(id);
     }
 
     @GetMapping("/search")
-    public List<BookDto> searchBooks(BookSearchParametersDto searchParameters) {
-        return bookService.search(searchParameters);
+    @Operation(
+            summary = "Search for books", description = "Search for books using various parameters."
+    )
+    @ApiResponse(responseCode = "200", description = "Search results returned successfully.")
+    public List<BookDto> searchBooks(
+            @Parameter(description = "Search parameters for filtering books")
+            BookSearchParametersDto searchParameters,
+            Pageable pageable) {
+        return bookService.search(searchParameters, pageable);
     }
 }
