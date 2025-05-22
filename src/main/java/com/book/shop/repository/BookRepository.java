@@ -2,6 +2,7 @@ package com.book.shop.repository;
 
 import com.book.shop.models.Book;
 import java.util.List;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -19,6 +20,14 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
     @Modifying
     void updateById(@Param("id") Long id, @Param("book") Book book);
 
-    @Query("SELECT b FROM Book b JOIN b.categories c WHERE c.id = :categoryId")
+    @Query("SELECT b FROM Book b JOIN FETCH b.categories c WHERE c.id = :categoryId")
     List<Book> findAllByCategoryId(@Param("categoryId") Long categoryId);
+
+    @EntityGraph(attributePaths = "categories")
+    @Override
+    List<Book> findAll();
+
+    @EntityGraph(attributePaths = "categories")
+    @Override
+    java.util.Optional<Book> findById(Long id);
 }
